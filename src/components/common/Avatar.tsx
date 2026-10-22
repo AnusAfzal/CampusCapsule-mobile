@@ -24,16 +24,13 @@ export const Avatar: React.FC<AvatarProps> = ({ name, uri, size = 42 }) => {
     return n.slice(0, 2).toUpperCase();
   };
 
-  // Generate deterministic warm color based on name
   const getColorFromName = (str: string): string => {
     const palette = [
       colors.primary[500],
-      colors.secondary[500],
-      '#4E7245',
-      '#D86B40',
-      '#5A7E51',
-      '#71816C',
-      '#B75F38',
+      colors.secondary[600],
+      '#6B6964',
+      '#333333',
+      '#88837B',
     ];
     let hash = 0;
     for (let i = 0; i < str.length; i++) {

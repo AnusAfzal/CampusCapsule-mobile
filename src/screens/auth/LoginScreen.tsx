@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../types/navigation';
 import { ScreenContainer } from '../../components/layout/ScreenContainer';
-import { Header } from '../../components/layout/Header';
+import { AuthHeader } from '../../components/layout/AuthHeader';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { authApi } from '../../api/authApi';
@@ -52,91 +52,88 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.outerContainer}>
-      <Header
-        title="Sign In"
-        showBack
-        onBack={() => navigation.goBack()}
+    <ScreenContainer scrollable contentContainerStyle={styles.formContent}>
+      <AuthHeader
+        activeScreen="Login"
+        onLogin={() => navigation.navigate('Login')}
+        onRegister={() => navigation.navigate('Register')}
       />
 
-      <ScreenContainer scrollable>
-        <View style={styles.formContent}>
-          <Text style={styles.title}>Welcome Back</Text>
+      <View style={styles.form}>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>Re-connect with your friend circle’s daily feed.</Text>
 
-          <Text style={styles.subtitle}>
-            Enter your details to reconnect with your friend group.
-          </Text>
-
-          {error ? (
-            <View style={styles.errorBox}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
-
-          <Input
-            label="Email Address"
-            placeholder="student@university.edu"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={(val) => {
-              setEmail(val);
-              setError(null);
-            }}
-          />
-
-          <Input
-            label="Password"
-            placeholder="••••••••"
-            isPassword
-            value={password}
-            onChangeText={(val) => {
-              setPassword(val);
-              setError(null);
-            }}
-          />
-
-          <Button
-            title="Sign In"
-            onPress={handleLogin}
-            loading={loading}
-            size="lg"
-            style={styles.submitBtn}
-          />
-
-          <View style={styles.footerRow}>
-            <Text style={styles.footerText}>
-              Don't have an account yet?{' '}
-            </Text>
-            <TouchableOpacity onPress={() => navigation.replace('Register')}>
-              <Text style={styles.linkText}>Create Account</Text>
-            </TouchableOpacity>
+        {error ? (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>{error}</Text>
           </View>
+        ) : null}
+
+        <Input
+          label="University Email"
+          placeholder="student@university.edu"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          dense
+          onChangeText={(val) => {
+            setEmail(val);
+            setError(null);
+          }}
+        />
+
+        <Input
+          label="Password"
+          placeholder="••••••••"
+          isPassword
+          value={password}
+          dense
+          onChangeText={(val) => {
+            setPassword(val);
+            setError(null);
+          }}
+        />
+
+        <Button
+          title="Sign In to Circle  →"
+          onPress={handleLogin}
+          loading={loading}
+          size="md"
+          style={styles.submitBtn}
+        />
+
+        <View style={styles.footerRow}>
+          <Text style={styles.footerText}>Don’t have an account yet? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.linkText}>Create Account</Text>
+          </TouchableOpacity>
         </View>
-      </ScreenContainer>
-    </View>
+      </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    backgroundColor: colors.light.background,
-  },
   formContent: {
-    paddingVertical: spacing.lg,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.xxl,
+  },
+  form: {
+    paddingTop: spacing.xxl,
   },
   title: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.semibold,
+    fontFamily: typography.families.serif,
+    fontSize: 27,
+    lineHeight: 33,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
     marginBottom: spacing.xs,
   },
   subtitle: {
-    fontSize: typography.sizes.base,
+    fontSize: 11,
     color: colors.light.textSecondary,
     marginBottom: spacing.xl,
-    lineHeight: typography.lineHeights.base,
+    lineHeight: 15,
   },
   errorBox: {
     backgroundColor: colors.status.errorBg,
@@ -153,20 +150,25 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.medium,
   },
   submitBtn: {
-    marginTop: spacing.md,
+    marginTop: spacing.xs,
+    minHeight: 42,
   },
   footerRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: spacing.xl,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: 1,
+    borderColor: colors.light.border,
   },
   footerText: {
-    fontSize: typography.sizes.base,
+    fontSize: typography.sizes.xs,
     color: colors.light.textSecondary,
   },
   linkText: {
-    fontSize: typography.sizes.base,
+    fontSize: typography.sizes.xs,
     color: colors.primary[500],
     fontWeight: typography.weights.bold,
+    textDecorationLine: 'underline',
   },
 });

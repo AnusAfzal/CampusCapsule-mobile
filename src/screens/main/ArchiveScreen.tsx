@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { ScreenContainer } from '../../components/layout/ScreenContainer';
 import { Header } from '../../components/layout/Header';
-import { Card } from '../../components/common/Card';
 import { EmptyState } from '../../components/common/EmptyState';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { Photo } from '../../components/common/Photo';
@@ -19,19 +16,25 @@ import { ErrorView } from '../../components/common/ErrorView';
 import { useGroupStore } from '../../store/groupStore';
 import { memoryApi } from '../../api/memoryApi';
 import { colors, radius, spacing, typography } from '../../constants/theme';
-import { Ionicons } from '@expo/vector-icons';
+
+interface ArchiveMemory {
+  id?: string;
+  date: string;
+  imageUrl: string;
+  caption?: string;
+}
 
 export const ArchiveScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const currentGroup = useGroupStore((state) => state.currentGroup);
 
-  const [archiveTree, setArchiveTree] = useState<Record<string, Record<string, any[]>>>({});
+  const [archiveTree, setArchiveTree] = useState<Record<string, Record<string, ArchiveMemory[]>>>({});
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const activeGroupId = (currentGroup?.id || currentGroup?._id) as string;
 
-  const loadArchive = async () => {
+  const loadArchive = useCallback(async () => {
     if (!activeGroupId) {
       setLoading(false);
       return;
@@ -47,13 +50,24 @@ export const ArchiveScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    loadArchive();
   }, [activeGroupId]);
 
+  useFocusEffect(
+    useCallback(() => {
+      void loadArchive();
+    }, [loadArchive])
+  );
+
   const years = Object.keys(archiveTree).sort().reverse();
+  const totalMemories = years.reduce(
+    (yearTotal, year) =>
+      yearTotal +
+      Object.values(archiveTree[year]).reduce(
+        (monthTotal, items) => monthTotal + items.length,
+        0
+      ),
+    0
+  );
 
   const getMonthName = (monthNum: string): string => {
     const names: Record<string, string> = {
@@ -92,25 +106,16 @@ export const ArchiveScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header
-        title="Graduation Archive"
-        subtitle={currentGroup ? `Our University Journey: ${currentGroup.name}` : undefined}
+        title="Archive"
+        subtitle={
+          currentGroup
+            ? `${currentGroup.name}${loading ? '' : ` · ${totalMemories} ${totalMemories === 1 ? 'memory' : 'memories'}`}`
+            : undefined
+        }
       />
       <ScreenContainer scrollable>
-        {/* Milestone Banner */}
-        <Card variant="elevated" style={styles.milestoneBanner}>
-          <View style={styles.mortarboardCircle}>
-            <Ionicons name="school" size={28} color="#B45309" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.bannerTitle}>Our 4-Year Journey</Text>
-            <Text style={styles.bannerSubtitle}>
-              Every daily photo builds toward your group graduation archive recap.
-            </Text>
-          </View>
-        </Card>
-
         {loading ? (
-          <LoadingSpinner message="Assembling years and semesters..." />
+          <LoadingSpinner message="Loading archive..." />
         ) : loadError ? (
           <ErrorView message={loadError} onRetry={loadArchive} />
         ) : years.length === 0 ? (
@@ -128,9 +133,7 @@ export const ArchiveScreen: React.FC = () => {
             return (
               <View key={year} style={styles.yearSection}>
                 <View style={styles.yearHeaderRow}>
-                  <View style={styles.yearBadge}>
-                    <Text style={styles.yearText}>{year}</Text>
-                  </View>
+                  <Text style={styles.yearText}>{year}</Text>
                   <View style={styles.dividerLine} />
                 </View>
 
@@ -145,19 +148,21 @@ export const ArchiveScreen: React.FC = () => {
                         </Text>
                       </View>
 
-                      {/* Photo filmstrip preview */}
-                      <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.filmstrip}
-                      >
-                        {items.map((item: any) => (
-                          <View key={item.id} style={styles.filmThumbWrapper}>
-                            <Photo uri={item.imageUrl} style={styles.filmThumb} />
-                            <Text style={styles.filmDate}>{getDayLabel(item.date)}</Text>
+                      <View style={styles.photoGrid}>
+                        {items.map((item, index) => (
+                          <View
+                            key={item.id || `${item.date}-${index}`}
+                            style={styles.photoTile}
+                          >
+                            <Photo uri={item.imageUrl} style={styles.archivePhoto} />
+                            <View style={styles.photoDate}>
+                              <Text style={styles.photoDateText}>
+                                {getDayLabel(item.date)}
+                              </Text>
+                            </View>
                           </View>
                         ))}
-                      </ScrollView>
+                      </View>
                     </View>
                   );
                 })}
@@ -175,35 +180,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.light.background,
   },
-  milestoneBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    backgroundColor: colors.light.surfaceSubtle,
-    borderColor: colors.light.borderSubtle,
-    borderWidth: 1,
-    padding: spacing.md,
-    marginVertical: spacing.md,
-  },
-  mortarboardCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: radius.md,
-    backgroundColor: colors.secondary[50],
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bannerTitle: {
-    fontSize: typography.sizes.base,
-    fontWeight: typography.weights.bold,
-    color: colors.light.textPrimary,
-  },
-  bannerSubtitle: {
-    fontSize: typography.sizes.xs,
-    color: colors.light.textSecondary,
-    marginTop: 2,
-    lineHeight: 16,
-  },
   yearSection: {
     marginTop: spacing.md,
     marginBottom: spacing.lg,
@@ -213,16 +189,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  yearBadge: {
-    backgroundColor: colors.secondary[600],
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.sm,
-  },
   yearText: {
-    color: '#FFFFFF',
+    color: colors.light.textPrimary,
+    fontFamily: typography.families.serif,
     fontWeight: typography.weights.bold,
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.lg,
     letterSpacing: 0.5,
   },
   dividerLine: {
@@ -234,10 +205,10 @@ const styles = StyleSheet.create({
   monthCard: {
     backgroundColor: colors.light.surface,
     borderRadius: radius.sm,
-    padding: spacing.md,
+    padding: spacing.sm,
     marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: colors.light.border,
+    borderColor: colors.light.borderSubtle,
   },
   monthHeader: {
     flexDirection: 'row',
@@ -255,23 +226,35 @@ const styles = StyleSheet.create({
     color: colors.light.textMuted,
     fontWeight: typography.weights.medium,
   },
-  filmstrip: {
-    gap: spacing.sm,
-    paddingVertical: spacing.xs,
+  photoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: spacing.sm,
   },
-  filmThumbWrapper: {
-    alignItems: 'center',
-  },
-  filmThumb: {
-    width: 80,
-    height: 90,
-    borderRadius: radius.sm,
+  photoTile: {
+    width: '48.5%',
+    aspectRatio: 1,
+    borderRadius: radius.xs,
+    overflow: 'hidden',
     backgroundColor: colors.light.surfaceSubtle,
   },
-  filmDate: {
+  archivePhoto: {
+    width: '100%',
+    height: '100%',
+  },
+  photoDate: {
+    position: 'absolute',
+    right: spacing.xs,
+    bottom: spacing.xs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
+    borderRadius: radius.xs,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+  },
+  photoDateText: {
+    color: '#FFFFFF',
     fontSize: 10,
     fontWeight: typography.weights.semibold,
-    color: colors.light.textSecondary,
-    marginTop: 3,
   },
 });

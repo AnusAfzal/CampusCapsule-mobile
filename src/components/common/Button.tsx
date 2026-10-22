@@ -9,7 +9,7 @@ import {
   StyleProp,
   View,
 } from 'react-native';
-import { colors, radius, shadows, spacing, typography } from '../../constants/theme';
+import { colors, radius, spacing, typography } from '../../constants/theme';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -144,15 +144,13 @@ const styles = StyleSheet.create({
   // Variants
   primaryContainer: {
     backgroundColor: colors.primary[500],
-    ...shadows.subtle,
   },
   secondaryContainer: {
     backgroundColor: colors.secondary[500],
-    ...shadows.subtle,
   },
   outlineContainer: {
     backgroundColor: colors.light.surface,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: colors.primary[500],
   },
   ghostContainer: {

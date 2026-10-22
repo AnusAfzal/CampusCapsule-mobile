@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Share,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -99,6 +100,19 @@ export const MemoryDetailScreen: React.FC = () => {
     );
   };
 
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: [memory.caption, memory.imageUrl].filter(Boolean).join('\n\n'),
+      });
+    } catch (err) {
+      Alert.alert(
+        'Unable to share memory',
+        err instanceof Error ? err.message : 'Please try again.'
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Header
@@ -133,6 +147,15 @@ export const MemoryDetailScreen: React.FC = () => {
             <Text style={styles.memoryDateLabel}>MEMORY FOR</Text>
             <Text style={styles.memoryDateVal}>{formattedDate}</Text>
           </View>
+          <TouchableOpacity
+            style={styles.shareButton}
+            onPress={handleShare}
+            accessibilityRole="button"
+            accessibilityLabel="Share this memory"
+          >
+            <Ionicons name="share-outline" size={18} color={colors.light.textPrimary} />
+            <Text style={styles.shareText}>Share</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Location Tag */}
@@ -245,6 +268,22 @@ const styles = StyleSheet.create({
   memoryDateVal: {
     fontSize: typography.sizes.base,
     fontWeight: typography.weights.bold,
+    color: colors.light.textPrimary,
+  },
+  shareButton: {
+    marginLeft: 'auto',
+    minHeight: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.round,
+    borderWidth: 1,
+    borderColor: colors.light.border,
+  },
+  shareText: {
+    fontSize: typography.sizes.xs,
+    fontWeight: typography.weights.semibold,
     color: colors.light.textPrimary,
   },
   locationCard: {

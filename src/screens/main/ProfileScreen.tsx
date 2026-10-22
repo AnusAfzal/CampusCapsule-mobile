@@ -20,7 +20,7 @@ export const ProfileScreen: React.FC = () => {
   const { currentGroup, groups, setCurrentGroup } = useGroupStore();
 
   const handleLogout = () => {
-    Alert.alert('Sign Out', 'Are you sure you want to sign out of CampusCapsule?', [
+    Alert.alert('Sign Out', 'Are you sure you want to sign out of Moment?', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Sign Out',
@@ -35,20 +35,24 @@ export const ProfileScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Profile & Circles" />
+      <Header
+        title="Profile"
+        rightAction={{ icon: 'log-out-outline', onPress: handleLogout }}
+      />
       <ScreenContainer scrollable>
-        {/* User Card */}
         <Card variant="elevated" style={styles.profileCard}>
-          <Avatar name={user?.name || 'User'} uri={user?.profileImage} size={64} />
+          <Avatar name={user?.name || 'User'} uri={user?.profileImage} size={48} />
           <View style={styles.profileInfo}>
             <Text style={styles.userName}>{user?.name}</Text>
             <Text style={styles.userEmail}>{user?.email}</Text>
           </View>
         </Card>
 
-        {/* My Friend Circles */}
         <View style={styles.sectionHeaderRow}>
-          <Text style={styles.sectionTitle}>My Circles ({groups.length})</Text>
+          <Text style={styles.sectionTitle}>My Circles</Text>
+          <Text style={styles.groupTotal}>
+            {groups.length} {groups.length === 1 ? 'circle' : 'circles'}
+          </Text>
         </View>
 
         {groups.map((grp) => {
@@ -70,9 +74,20 @@ export const ProfileScreen: React.FC = () => {
                   <Text style={styles.groupNameText} numberOfLines={1}>
                     {grp.name}
                   </Text>
-                  <Text style={styles.groupCountText}>
-                    {grp.memberCount || 1} members · {grp.memoryCount || 0} memories
-                  </Text>
+                  {typeof grp.memberCount === 'number' || typeof grp.memoryCount === 'number' ? (
+                    <Text style={styles.groupCountText}>
+                      {[
+                        typeof grp.memberCount === 'number'
+                          ? `${grp.memberCount} ${grp.memberCount === 1 ? 'member' : 'members'}`
+                          : null,
+                        typeof grp.memoryCount === 'number'
+                          ? `${grp.memoryCount} ${grp.memoryCount === 1 ? 'memory' : 'memories'}`
+                          : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </Text>
+                  ) : null}
                 </View>
                 {isActive && (
                   <Badge label="Active" variant="primary" style={{ marginRight: spacing.xs }} />
@@ -85,10 +100,9 @@ export const ProfileScreen: React.FC = () => {
           );
         })}
 
-        {/* Circle Creation CTAs */}
         <View style={styles.ctaRow}>
           <Button
-            title="+ Create New Circle"
+            title="Create New Circle"
             onPress={() => navigation.navigate('CreateGroup')}
             variant="outline"
             size="md"
@@ -103,14 +117,6 @@ export const ProfileScreen: React.FC = () => {
           />
         </View>
 
-        {/* Sign Out Button */}
-        <Button
-          title="Sign Out"
-          onPress={handleLogout}
-          variant="danger"
-          size="md"
-          style={styles.logoutBtn}
-        />
       </ScreenContainer>
     </View>
   );
@@ -124,15 +130,18 @@ const styles = StyleSheet.create({
   profileCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.base,
-    marginVertical: spacing.md,
+    padding: spacing.md,
+    marginTop: spacing.sm,
+    marginBottom: spacing.md,
     gap: spacing.md,
+    borderRadius: radius.sm,
   },
   profileInfo: {
     flex: 1,
   },
   userName: {
-    fontSize: typography.sizes.lg,
+    fontFamily: typography.families.sans,
+    fontSize: typography.sizes.base,
     fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
   },
@@ -145,24 +154,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
     marginBottom: spacing.md,
   },
   sectionTitle: {
-    fontSize: typography.sizes.base,
-    fontWeight: typography.weights.bold,
+    fontFamily: typography.families.serif,
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.semibold,
     color: colors.light.textPrimary,
   },
+  groupTotal: {
+    fontSize: typography.sizes.xs,
+    color: colors.light.textMuted,
+  },
   groupTile: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.light.surface,
     borderRadius: radius.sm,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderColor: colors.light.borderSubtle,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.light.border,
   },
   groupTileActive: {
-    borderColor: colors.primary[400],
-    backgroundColor: colors.primary[50],
+    borderColor: colors.light.textPrimary,
+    backgroundColor: colors.light.surface,
   },
   groupTileContent: {
     flexDirection: 'row',
@@ -170,10 +185,10 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   groupIconCircle: {
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     borderRadius: radius.round,
-    backgroundColor: colors.primary[100],
+    backgroundColor: colors.light.surfaceSubtle,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -191,9 +206,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
     marginTop: spacing.md,
-  },
-  logoutBtn: {
-    marginTop: spacing.xxl,
-    marginBottom: spacing.xl,
   },
 });

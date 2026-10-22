@@ -1,70 +1,58 @@
 
-/**
- * CampusCapsule Design System
- *
- * Philosophy: Warm collegiate archival aesthetic.
- * Focus is on shared human moments and photos,
- * avoiding generic AI/SaaS gradients and over-rounded bubbly components.
- */
-
 import { Dimensions, PixelRatio } from 'react-native';
 
 export const colors = {
-  // Brand Forest Green (Figma primary)
   primary: {
-    50: '#F2F6F0',
-    100: '#E4EDE1',
-    200: '#CADBC5',
-    300: '#ABC3A4',
-    400: '#6E9364',
-    500: '#3F6338',
-    600: '#34532D',
-    700: '#294323',
-    800: '#20341B',
-    900: '#172613',
+    50: '#F5F3EF',
+    100: '#EAE7E1',
+    200: '#D8D4CC',
+    300: '#B8B4AC',
+    400: '#77736D',
+    500: '#111111',
+    600: '#242424',
+    700: '#191919',
+    800: '#111111',
+    900: '#090909',
   },
 
-  // Warm Terracotta / Apricot Accent (Figma secondary)
   secondary: {
-    50: '#FDF4F0',
-    100: '#FAE6DD',
-    200: '#F5CBB9',
-    300: '#EEAB91',
-    400: '#E5835F',
-    500: '#E06A42',
-    600: '#C7542E',
-    700: '#A73F1D',
-    800: '#873014',
-    900: '#6E240D',
+    50: '#F7F5F1',
+    100: '#EEEAE3',
+    200: '#DED9D0',
+    300: '#C5BFB5',
+    400: '#969087',
+    500: '#65615B',
+    600: '#4F4B45',
+    700: '#3B3833',
+    800: '#292724',
+    900: '#171615',
   },
 
-  // Light Mode (Figma warm porcelain ivory canvas & crisp cards)
   light: {
-    background: '#F9F6F0',
+    background: '#FAF8F4',
     surface: '#FFFFFF',
-    surfaceSubtle: '#F3EFE7',
+    surfaceSubtle: '#F4F1EB',
     surfaceElevated: '#FFFFFF',
-    border: '#E8E2D6',
-    borderSubtle: '#F0ECE4',
-    textPrimary: '#1E241C',
-    textSecondary: '#565F52',
-    textMuted: '#7E877A',
+    border: '#E5E1D9',
+    borderSubtle: '#EEEAE3',
+    textPrimary: '#111111',
+    textSecondary: '#5B5853',
+    textMuted: '#85817A',
     textInverse: '#FFFFFF',
-    overlay: 'rgba(22, 28, 20, 0.45)',
+    overlay: 'rgba(17, 17, 17, 0.48)',
   },
 
-  // Dark Mode
   dark: {
-    background: '#151914',
-    surface: '#1D221C',
-    surfaceSubtle: '#262D25',
-    surfaceElevated: '#2E362C',
-    border: '#384236',
-    borderSubtle: '#2C352A',
-    textPrimary: '#F4F6F3',
-    textSecondary: '#ACB5A9',
-    textMuted: '#818C7E',
-    textInverse: '#151914',
+    background: '#151515',
+    surface: '#202020',
+    surfaceSubtle: '#292929',
+    surfaceElevated: '#2E2E2E',
+    border: '#3C3C3C',
+    borderSubtle: '#303030',
+    textPrimary: '#F5F5F5',
+    textSecondary: '#B7B7B7',
+    textMuted: '#898989',
+    textInverse: '#151515',
     overlay: 'rgba(0, 0, 0, 0.70)',
   },
 
@@ -80,7 +68,7 @@ export const colors = {
     infoBg: '#E0F2FE',
   },
 
-  milestone: '#E06A42',
+  milestone: '#111111',
 };
 
 export const typography = {
@@ -100,6 +88,11 @@ export const typography = {
     medium: '500' as const,
     semibold: '600' as const,
     bold: '700' as const,
+  },
+
+  families: {
+    sans: 'sans-serif',
+    serif: 'serif',
   },
 
   lineHeights: {
@@ -129,11 +122,11 @@ export const spacing = {
 
 export const radius = {
   none: 0,
-  xs: 6,
-  sm: 10,
-  md: 14,
-  lg: 18,
-  xl: 24,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 14,
+  xl: 18,
   round: 9999,
 };
 
@@ -147,19 +140,19 @@ export const shadows = {
   },
 
   subtle: {
-    shadowColor: '#1A2418',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
+    shadowColor: '#111111',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.025,
+    shadowRadius: 3,
+    elevation: 0,
   },
 
   card: {
-    shadowColor: '#1A2418',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowColor: '#111111',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.035,
+    shadowRadius: 6,
+    elevation: 1,
   },
 
   floating: {

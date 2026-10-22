@@ -63,8 +63,9 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[100],
   },
   title: {
+    fontFamily: typography.families.serif,
     fontSize: typography.sizes.md,
-    fontWeight: typography.weights.semibold,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
     textAlign: 'center',
     marginBottom: spacing.xs,

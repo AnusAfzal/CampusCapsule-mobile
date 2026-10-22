@@ -15,16 +15,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topSection}>
-        <View style={styles.badgeRow}>
+        <View style={styles.brandRow}>
+          <View style={styles.iconCircle}>
+            <Ionicons name="images" size={19} color="#FFFFFF" />
+          </View>
+          <Text style={styles.brandName}>Moment</Text>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>A private archive</Text>
+            <Text style={styles.badgeText}>4-year circle</Text>
           </View>
         </View>
 
         <View style={styles.heroCard}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="images" size={40} color={colors.primary[500]} />
-          </View>
           <Text style={styles.headline}>Keep the days{'\n'}you'll want back.</Text>
           <Text style={styles.subtext}>
           A shared memory book for the ordinary days, big milestones, and friends who made university yours.
@@ -79,9 +80,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  badgeRow: {
-    alignItems: 'flex-start',
-    marginBottom: spacing.md,
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.xxl,
   },
   badge: {
     backgroundColor: colors.light.surfaceSubtle,
@@ -100,18 +103,25 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   iconCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.md,
-    backgroundColor: colors.primary[50],
+    width: 32,
+    height: 32,
+    borderRadius: radius.round,
+    backgroundColor: colors.light.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.lg,
+  },
+  brandName: {
+    fontFamily: typography.families.serif,
+    fontSize: typography.sizes.xl,
+    fontWeight: typography.weights.bold,
+    color: colors.light.textPrimary,
+    flex: 1,
   },
   headline: {
-    fontSize: 26,
-    lineHeight: 32,
-    fontWeight: typography.weights.semibold,
+    fontFamily: typography.families.serif,
+    fontSize: 34,
+    lineHeight: 40,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
     letterSpacing: -0.5,
   },

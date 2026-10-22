@@ -5,6 +5,7 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  ActivityIndicator,
   View,
   ViewStyle,
 } from 'react-native';
@@ -25,9 +26,11 @@ export const Photo: React.FC<PhotoProps> = ({
   label = 'Photo unavailable',
 }) => {
   const [hasError, setHasError] = useState(!uri);
+  const [isLoading, setIsLoading] = useState(Boolean(uri));
 
   useEffect(() => {
     setHasError(!uri);
+    setIsLoading(Boolean(uri));
   }, [uri]);
 
   return (
@@ -37,15 +40,21 @@ export const Photo: React.FC<PhotoProps> = ({
           source={{ uri }}
           style={[styles.image, imageStyle]}
           resizeMode="cover"
+          onLoadEnd={() => setIsLoading(false)}
           onError={() => setHasError(true)}
           accessibilityLabel="Shared memory photo"
         />
-      ) : (
+      ) : null}
+      {isLoading && !hasError ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size="small" color={colors.light.textMuted} />
+        </View>
+      ) : hasError ? (
         <View style={styles.fallback}>
           <Ionicons name="image-outline" size={24} color={colors.light.textMuted} />
           <Text style={styles.label}>{label}</Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -65,6 +74,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.xs,
+  },
+  loading: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
     color: colors.light.textMuted,

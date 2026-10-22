@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { ScreenContainer } from '../../components/layout/ScreenContainer';
@@ -52,7 +52,7 @@ export const CalendarScreen: React.FC = () => {
   const monthParam = format(currentMonth, 'yyyy-MM');
   const todayStr = format(new Date(), 'yyyy-MM-dd');
 
-  const loadCalendarData = async () => {
+  const loadCalendarData = useCallback(async () => {
     if (!activeGroupId) {
       setLoading(false);
       return;
@@ -68,9 +68,9 @@ export const CalendarScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeGroupId, monthParam]);
 
-  const loadMemoriesForDate = async (dateStr: string) => {
+  const loadMemoriesForDate = useCallback(async (dateStr: string) => {
     if (!activeGroupId) return;
     setDateError(null);
     try {
@@ -83,15 +83,14 @@ export const CalendarScreen: React.FC = () => {
     } finally {
       setLoadingDateMemories(false);
     }
-  };
+  }, [activeGroupId]);
 
-  useEffect(() => {
-    loadCalendarData();
-  }, [activeGroupId, monthParam]);
-
-  useEffect(() => {
-    loadMemoriesForDate(selectedDateStr);
-  }, [activeGroupId, selectedDateStr]);
+  useFocusEffect(
+    useCallback(() => {
+      void loadCalendarData();
+      void loadMemoriesForDate(selectedDateStr);
+    }, [loadCalendarData, loadMemoriesForDate, selectedDateStr])
+  );
 
   const daysInMonth = eachDayOfInterval({
     start: startOfMonth(currentMonth),
@@ -110,7 +109,7 @@ export const CalendarScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Memory Calendar" subtitle={currentGroup?.name} />
+      <Header title="Calendar" subtitle={currentGroup?.name} />
       <ScreenContainer scrollable>
         {/* Month Navigation */}
         <View style={styles.monthHeader}>

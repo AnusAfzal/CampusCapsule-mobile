@@ -301,7 +301,7 @@ export const request = async <T = any>(
     // Network or server unreachable
     throw new ApiError(
       error.message ||
-        'Unable to connect to CampusCapsule servers. Please check your internet connection.',
+        'Unable to connect to Moment servers. Please check your internet connection.',
       0
     );
   }

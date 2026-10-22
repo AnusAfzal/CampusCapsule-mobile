@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light.background,
   },
   title: {
+    fontFamily: typography.families.serif,
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.semibold,
     color: colors.light.textPrimary,

@@ -18,6 +18,7 @@ interface InputProps extends TextInputProps {
   leftIcon?: React.ReactNode;
   isPassword?: boolean;
   containerStyle?: ViewStyle;
+  dense?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -27,6 +28,7 @@ export const Input: React.FC<InputProps> = ({
   leftIcon,
   isPassword = false,
   containerStyle,
+  dense = false,
   style,
   multiline = false,
   ...props
@@ -41,6 +43,7 @@ export const Input: React.FC<InputProps> = ({
       <View
         style={[
           styles.inputContainer,
+          dense && styles.inputContainerDense,
           multiline && styles.inputContainerMultiline,
           isFocused && styles.inputFocused,
           Boolean(error) && styles.inputError,
@@ -68,6 +71,7 @@ export const Input: React.FC<InputProps> = ({
           }}
           style={[
             styles.input,
+            dense && styles.inputDense,
             multiline && styles.multilineInput,
             style,
           ]}
@@ -118,10 +122,12 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: typography.sizes.sm,
-    fontWeight: typography.weights.semibold,
+    fontSize: 10,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
     marginBottom: spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.25,
   },
 
   inputContainer: {
@@ -129,10 +135,17 @@ const styles = StyleSheet.create({
     minHeight: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.light.surface,
-    borderWidth: 1.5,
-    borderColor: colors.light.border,
+    backgroundColor: colors.light.surfaceSubtle,
+    borderWidth: 1,
+    borderColor: colors.light.borderSubtle,
     borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+  },
+
+  inputContainerDense: {
+    minHeight: 40,
+    borderWidth: 0,
+    borderRadius: radius.round,
     paddingHorizontal: spacing.md,
   },
 
@@ -166,6 +179,10 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineHeights.base,
     color: colors.light.textPrimary,
     paddingVertical: 0,
+  },
+
+  inputDense: {
+    fontSize: typography.sizes.xs,
   },
 
   multilineInput: {

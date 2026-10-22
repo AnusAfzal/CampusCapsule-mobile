@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "CampusCapsule",
+    "name": "Moment",
     "slug": "campuscapsule",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "scheme": "campuscapsule",
     "ios": {
       "supportsTablet": false,
@@ -29,14 +29,14 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "CampusCapsule needs access to your gallery so you can share your daily university memory.",
-          "cameraPermission": "CampusCapsule needs camera access so you can capture real-time moments with your friends."
+          "photosPermission": "Moment needs access to your gallery so you can share your daily university memory.",
+          "cameraPermission": "Moment needs camera access so you can capture real-time moments with your friends."
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "CampusCapsule uses your location to tag campus landmarks and hangout spots on your memories."
+          "locationAlwaysAndWhenInUsePermission": "Moment uses your location to tag campus landmarks and hangout spots on your memories."
         }
       ],
       "expo-font"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { ScreenContainer } from '../../components/layout/ScreenContainer';
@@ -25,6 +25,11 @@ import { colors, radius, spacing, typography } from '../../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { format, parseISO } from 'date-fns';
 
+const getMemoryKey = (memory: Memory): string =>
+  memory.id ||
+  memory._id ||
+  `${memory.groupId}-${memory.userId.id}-${memory.memoryDate}`;
+
 export const TimelineScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const currentGroup = useGroupStore((state) => state.currentGroup);
@@ -39,7 +44,7 @@ export const TimelineScreen: React.FC = () => {
 
   const activeGroupId = (currentGroup?.id || currentGroup?._id) as string;
 
-  const fetchMemories = async (pageNum = 1, isRefresh = false) => {
+  const fetchMemories = useCallback(async (pageNum = 1, isRefresh = false) => {
     if (!activeGroupId) {
       setLoading(false);
       setRefreshing(false);
@@ -54,7 +59,13 @@ export const TimelineScreen: React.FC = () => {
       if (pageNum === 1) {
         setMemories(res);
       } else {
-        setMemories((prev) => [...prev, ...res]);
+        setMemories((prev) => {
+          const existingIds = new Set(prev.map(getMemoryKey));
+          return [
+            ...prev,
+            ...res.filter((memory) => !existingIds.has(getMemoryKey(memory))),
+          ];
+        });
       }
       setHasMore(res.length === 15);
       setPage(pageNum);
@@ -66,11 +77,13 @@ export const TimelineScreen: React.FC = () => {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  };
-
-  useEffect(() => {
-    fetchMemories(1);
   }, [activeGroupId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void fetchMemories(1);
+    }, [fetchMemories])
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -125,11 +138,11 @@ export const TimelineScreen: React.FC = () => {
         <Photo uri={item.imageUrl} style={styles.imageContainer} />
 
         {/* Caption & Footer */}
-        <View style={styles.cardFooter}>
-          <Text style={[styles.captionText, !item.caption && styles.captionFallback]}>
-            {item.caption || 'A day worth keeping.'}
-          </Text>
-        </View>
+        {item.caption ? (
+          <View style={styles.cardFooter}>
+            <Text style={styles.captionText}>{item.caption}</Text>
+          </View>
+        ) : null}
       </TouchableOpacity>
     );
   };
@@ -163,8 +176,12 @@ export const TimelineScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header
-        title="Chronological Timeline"
-        subtitle={currentGroup?.name}
+        title="Timeline"
+        subtitle={
+          currentGroup?.name
+            ? `${currentGroup.name} · ${memories.length} ${memories.length === 1 ? 'memory' : 'memories'}`
+            : `${memories.length} ${memories.length === 1 ? 'memory' : 'memories'}`
+        }
       />
       {loading ? (
         <LoadingSpinner message="Gathering moments..." />
@@ -179,7 +196,7 @@ export const TimelineScreen: React.FC = () => {
       ) : (
         <FlatList
           data={memories}
-          keyExtractor={(item) => item.id || item._id || String(Math.random())}
+          keyExtractor={getMemoryKey}
           renderItem={renderMemoryItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
@@ -218,17 +235,19 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
   },
   card: {
-    backgroundColor: 'transparent',
-    borderRadius: radius.sm,
+    backgroundColor: colors.light.surface,
+    borderRadius: radius.md,
     marginBottom: spacing.xl,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.light.border,
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: spacing.sm,
-    paddingHorizontal: 2,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
   },
   authorRow: {
     flexDirection: 'row',
@@ -268,21 +287,17 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    aspectRatio: 0.82,
-    borderRadius: radius.sm,
+    aspectRatio: 0.92,
     backgroundColor: colors.light.surfaceSubtle,
   },
   cardFooter: {
-    paddingTop: spacing.sm,
-    paddingHorizontal: 2,
+    paddingTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.md,
   },
   captionText: {
     fontSize: typography.sizes.base,
     color: colors.light.textPrimary,
     lineHeight: typography.lineHeights.base,
-  },
-  captionFallback: {
-    color: colors.light.textMuted,
-    fontStyle: 'italic',
   },
 });

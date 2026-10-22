@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { AuthStackParamList } from '../../types/navigation';
 import { ScreenContainer } from '../../components/layout/ScreenContainer';
-import { Header } from '../../components/layout/Header';
+import { AuthHeader } from '../../components/layout/AuthHeader';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { authApi } from '../../api/authApi';
@@ -60,102 +60,100 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   };
 
   return (
-    <View style={styles.outerContainer}>
-      <Header
-        title="Create Account"
-        showBack
-        onBack={() => navigation.goBack()}
+    <ScreenContainer scrollable contentContainerStyle={styles.formContent}>
+      <AuthHeader
+        activeScreen="Register"
+        onLogin={() => navigation.navigate('Login')}
+        onRegister={() => navigation.navigate('Register')}
       />
 
-      <ScreenContainer scrollable>
-        <View style={styles.formContent}>
-          <Text style={styles.title}>Join CampusCapsule</Text>
+      <View style={styles.form}>
+        <Text style={styles.title}>Join Moment</Text>
+        <Text style={styles.subtitle}>Start archiving daily moments for your 4-year circle.</Text>
 
-          <Text style={styles.subtitle}>
-            Create your profile to start creating and sharing daily moments
-            with your circle.
-          </Text>
-
-          {error ? (
-            <View style={styles.errorBox}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
-
-          <Input
-            label="Full Name"
-            placeholder="Alex Johnson"
-            autoCapitalize="words"
-            value={name}
-            onChangeText={(val) => {
-              setName(val);
-              setError(null);
-            }}
-          />
-
-          <Input
-            label="Email Address"
-            placeholder="alex@university.edu"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={(val) => {
-              setEmail(val);
-              setError(null);
-            }}
-          />
-
-          <Input
-            label="Password"
-            placeholder="At least 6 characters"
-            isPassword
-            value={password}
-            onChangeText={(val) => {
-              setPassword(val);
-              setError(null);
-            }}
-            helperText="Make it secure to safeguard your private group memories."
-          />
-
-          <Button
-            title="Create Account"
-            onPress={handleRegister}
-            loading={loading}
-            size="lg"
-            style={styles.submitBtn}
-          />
-
-          <View style={styles.footerRow}>
-            <Text style={styles.footerText}>Already have an account?{' '}</Text>
-            <TouchableOpacity onPress={() => navigation.replace('Login')}>
-              <Text style={styles.linkText}>Sign In</Text>
-            </TouchableOpacity>
+        {error ? (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>{error}</Text>
           </View>
+        ) : null}
+
+        <Input
+          label="Full Name"
+          placeholder="Alex Johnson"
+          autoCapitalize="words"
+          value={name}
+          dense
+          onChangeText={(val) => {
+            setName(val);
+            setError(null);
+          }}
+        />
+
+        <Input
+          label="Student Email"
+          placeholder="student@university.edu"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          dense
+          onChangeText={(val) => {
+            setEmail(val);
+            setError(null);
+          }}
+        />
+
+        <Input
+          label="Password"
+          placeholder="At least 6 characters"
+          isPassword
+          value={password}
+          dense
+          onChangeText={(val) => {
+            setPassword(val);
+            setError(null);
+          }}
+        />
+
+        <Button
+          title="Create Account  →"
+          onPress={handleRegister}
+          loading={loading}
+          size="md"
+          style={styles.submitBtn}
+        />
+
+        <View style={styles.footerRow}>
+          <Text style={styles.footerText}>Already have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.linkText}>Sign In</Text>
+          </TouchableOpacity>
         </View>
-      </ScreenContainer>
-    </View>
+      </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    backgroundColor: colors.light.background,
-  },
   formContent: {
-    paddingVertical: spacing.lg,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.xxl,
+  },
+  form: {
+    paddingTop: spacing.xxl,
   },
   title: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.semibold,
+    fontFamily: typography.families.serif,
+    fontSize: 27,
+    lineHeight: 33,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
     marginBottom: spacing.xs,
   },
   subtitle: {
-    fontSize: typography.sizes.base,
+    fontSize: 11,
     color: colors.light.textSecondary,
     marginBottom: spacing.xl,
-    lineHeight: typography.lineHeights.base,
+    lineHeight: 15,
   },
   errorBox: {
     backgroundColor: colors.status.errorBg,
@@ -172,20 +170,25 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.medium,
   },
   submitBtn: {
-    marginTop: spacing.md,
+    marginTop: spacing.xs,
+    minHeight: 42,
   },
   footerRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: spacing.xl,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: 1,
+    borderColor: colors.light.border,
   },
   footerText: {
-    fontSize: typography.sizes.base,
+    fontSize: typography.sizes.xs,
     color: colors.light.textSecondary,
   },
   linkText: {
-    fontSize: typography.sizes.base,
+    fontSize: typography.sizes.xs,
     color: colors.primary[500],
     fontWeight: typography.weights.bold,
+    textDecorationLine: 'underline',
   },
 });

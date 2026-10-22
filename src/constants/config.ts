@@ -15,7 +15,7 @@ export const API_BASE_URL =
   (__DEV__ ? DEV_API_URL : PRODUCTION_API_URL);
 
 export const APP_CONFIG = {
-  appName: 'CampusCapsule',
+  appName: 'Moment',
   tagline: 'Your University Life, Preserved Daily',
   inviteScheme: 'campuscapsule://join/',
   maxMemoryDaysPast: 30,

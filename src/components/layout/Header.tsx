@@ -66,15 +66,13 @@ export const Header: React.FC<HeaderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 56,
+    minHeight: 64,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.base,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
     backgroundColor: colors.light.background,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.borderSubtle,
   },
   leftContainer: {
     flexDirection: 'row',
@@ -85,10 +83,6 @@ const styles = StyleSheet.create({
     marginRight: spacing.sm + 2,
     width: 38,
     height: 38,
-    borderRadius: radius.round,
-    backgroundColor: colors.light.surface,
-    borderWidth: 1,
-    borderColor: colors.light.borderSubtle,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -96,8 +90,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.semibold,
+    fontFamily: typography.families.serif,
+    fontSize: typography.sizes.xl,
+    fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,
   },
   subtitle: {

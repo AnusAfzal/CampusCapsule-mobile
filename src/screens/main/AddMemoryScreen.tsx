@@ -109,7 +109,7 @@ export const AddMemoryScreen: React.FC = () => {
       if (status !== 'granted') {
         Alert.alert(
           'Camera Access Required',
-          'CampusCapsule needs camera permissions to take real-time photos with your friends.'
+          'Moment needs camera access to capture a memory with your friends.'
         );
         return;
       }
@@ -146,7 +146,7 @@ export const AddMemoryScreen: React.FC = () => {
       if (status !== 'granted') {
         Alert.alert(
           'Gallery Access Required',
-          'CampusCapsule needs photo library access to choose your daily memory.'
+          'Moment needs gallery access to choose a photo for your memory.'
         );
         return;
       }
@@ -245,7 +245,6 @@ export const AddMemoryScreen: React.FC = () => {
     1,
     2,
     3,
-    4,
   ].map((daysAgo) => {
     const d = subDays(
       new Date(),
@@ -713,6 +712,7 @@ const styles = StyleSheet.create({
   },
 
   sectionHeading: {
+    fontFamily: typography.families.sans,
     fontSize:
       typography.sizes.sm,
     fontWeight:
@@ -779,7 +779,7 @@ const styles = StyleSheet.create({
 
   datePillActive: {
     backgroundColor:
-      colors.primary[50],
+      colors.primary[500],
     borderColor:
       colors.primary[500],
   },
@@ -799,7 +799,7 @@ const styles = StyleSheet.create({
 
   datePillTextActive: {
     color:
-      colors.primary[700],
+      '#FFFFFF',
     fontWeight:
       typography.weights.bold,
   },
@@ -814,7 +814,7 @@ const styles = StyleSheet.create({
 
   datePillSubActive: {
     color:
-      colors.primary[600],
+      '#FFFFFF',
   },
 
   photoPickerRow: {

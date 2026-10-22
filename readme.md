@@ -1,10 +1,10 @@
-# CampusCapsule Mobile
+# Moment Mobile
 
-**Your University Life, Preserved Daily.**
+**A daily archive for your circle.**
 
-CampusCapsule is an Android mobile application designed to help university friends capture, share, and preserve their university memories in a private, shared digital archive.
+Moment is an Android mobile application designed to help university friends capture, share, and preserve their memories in a private, shared digital archive.
 
-From campus events and everyday moments to unforgettable experiences with friends, CampusCapsule helps groups keep their memories organized by date and accessible over time.
+From campus events and everyday moments to unforgettable experiences with friends, Moment helps groups keep their memories organized by date and accessible over time.
 
 This repository contains the mobile application built with Expo, React Native, and TypeScript.
 
@@ -17,7 +17,7 @@ This repository contains the mobile application built with Expo, React Native, a
 - **Date-Based Memories:** Keep photos organized by the dates they represent.
 - **Missed-Day Memories:** Add memories for previous dates, subject to the app's rules.
 - **Image Uploads:** Upload photos through the backend to cloud image storage.
-- **Backend Integration:** Communicate with the CampusCapsule REST API.
+- **Backend Integration:** Communicate with the existing private-group REST API.
 - **Android Support:** Run the app during development and create Android APK builds.
 
 ## Tech Stack
@@ -133,7 +133,7 @@ The build profile should be configured in `eas.json` for internal APK distributi
 
 ## Backend Configuration
 
-The mobile application communicates with the CampusCapsule backend.
+The Moment mobile application communicates with the existing backend service.
 
 **Hosted API:**
 
@@ -195,4 +195,4 @@ GitHub: [@AnusAfzal](https://github.com/AnusAfzal)
 
 ---
 
-*CampusCapsule — Your University Life, Preserved Daily.*
+*Moment — A daily archive for your circle.*

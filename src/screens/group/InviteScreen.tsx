@@ -45,7 +45,7 @@ export const InviteScreen: React.FC = () => {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `Join our private university memory group on CampusCapsule! Use invite code: ${inviteCode} or link: ${deepLink}`,
+        message: `Join our private university memory group on Moment! Use invite code: ${inviteCode} or link: ${deepLink}`,
       });
     } catch (err) {
       console.warn('Share error:', err);
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light.background,
   },
   title: {
+    fontFamily: typography.families.serif,
     fontSize: 22,
     fontWeight: typography.weights.bold,
     color: colors.light.textPrimary,

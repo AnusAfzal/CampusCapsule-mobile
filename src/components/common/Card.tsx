@@ -41,8 +41,7 @@ export const Card: React.FC<CardProps> = ({
         return {
           backgroundColor: colors.light.surface,
           borderWidth: 1,
-          borderColor: colors.light.border,
-          ...shadows.subtle,
+          borderColor: colors.light.borderSubtle,
         };
     }
   };
@@ -70,7 +69,7 @@ export const Card: React.FC<CardProps> = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     overflow: 'hidden',
   },
 });

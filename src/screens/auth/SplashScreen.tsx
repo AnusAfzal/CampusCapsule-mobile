@@ -35,8 +35,8 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
       <View style={styles.logoBadge}>
         <Ionicons name="school-outline" size={32} color={colors.light.surface} />
       </View>
-      <Text style={styles.brandTitle}>CampusCapsule</Text>
-      <Text style={styles.brandSubtitle}>Your University Life, Preserved Daily</Text>
+      <Text style={styles.brandTitle}>Moment</Text>
+      <Text style={styles.brandSubtitle}>A daily archive for your circle</Text>
       <ActivityIndicator
         size="small"
         color={colors.primary[500]}
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.base,
   },
   brandTitle: {
+    fontFamily: typography.families.serif,
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.semibold,
     color: colors.light.textPrimary,

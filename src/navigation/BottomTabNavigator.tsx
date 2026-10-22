@@ -8,7 +8,7 @@ import { AddMemoryScreen } from '../screens/main/AddMemoryScreen';
 import { ArchiveScreen } from '../screens/main/ArchiveScreen';
 import { ProfileScreen } from '../screens/main/ProfileScreen';
 import { CalendarScreen } from '../screens/main/CalendarScreen';
-import { colors, radius, shadows, spacing, typography } from '../constants/theme';
+import { colors, radius, spacing, typography } from '../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -20,7 +20,7 @@ export const BottomTabNavigator: React.FC = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
-        tabBarActiveTintColor: colors.primary[500],
+        tabBarActiveTintColor: colors.light.textPrimary,
         tabBarInactiveTintColor: colors.light.textMuted,
         tabBarStyle: styles.tabBar,
         tabBarLabelStyle: styles.tabBarLabel,
@@ -52,7 +52,7 @@ export const BottomTabNavigator: React.FC = () => {
         name="AddMemory"
         component={AddMemoryScreen}
         options={{
-          tabBarLabel: 'Add Daily',
+          tabBarLabel: '',
           tabBarIcon: ({ focused }) => (
             <View style={[styles.addMemoryButton, focused && styles.addMemoryButtonActive]}>
               <Ionicons name="add" size={28} color="#FFFFFF" />
@@ -91,29 +91,28 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light.surface,
     borderTopWidth: 1,
     borderTopColor: colors.light.borderSubtle,
-    height: 64,
+    height: 68,
     paddingBottom: 8,
-    paddingTop: 6,
-    ...shadows.subtle,
-    elevation: 2,
+    paddingTop: 8,
+    elevation: 0,
   },
   tabBarLabel: {
-    fontSize: typography.sizes.xs,
+    fontSize: 10,
     fontWeight: typography.weights.medium,
     marginTop: 2,
+    marginBottom: 0,
   },
   addMemoryButton: {
-    width: 48,
-    height: 48,
+    width: 42,
+    height: 42,
     borderRadius: radius.round,
-    backgroundColor: colors.primary[500],
+    backgroundColor: colors.light.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -16,
+    marginTop: -13,
     borderWidth: 3,
     borderColor: colors.light.surface,
-    ...shadows.card,
-    elevation: 4,
+    elevation: 0,
   },
   addMemoryButtonActive: {
     backgroundColor: colors.primary[600],
